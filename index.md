@@ -1,25 +1,2 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0;url=https://th3.netlify.app/">
-    <link rel="canonical" href="https://th3.netlify.app/">
-    <title>Redirecting...</title>
-    <script>window.location.href = "https://th3.netlify.app/";</script>
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        padding: 20px;
-      }
-      p {
-        margin: 20px 0;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Redirecting...</h1>
-    <p>This page has moved to <a href="https://th3.netlify.app/">https://th3.netlify.app/</a>.</p>
-    <p>If you are not redirected automatically, please click the link above.</p>
-  </body>
-</html>
+permalink: /index.html redirect_to: https://th3.netlify.app/
+<!DOCTYPE html> <html lang="en-US"> <head> <meta charset="utf-8"> <meta http-equiv="refresh" content="0;url=https://th3.netlify.app/"> <link rel="canonical" href="https://th3.netlify.app/"> <title>Redirecting...</title> <script>window.location.href = "https://th3.netlify.app/";</script> <style> body { font-family: sans-serif; text-align: center; padding: 20px; } p { margin: 20px 0; } </style> </head> <body> <h1>Redirecting...</h1> <p>This page has moved to <a href="https://th3.netlify.app/">https://th3.netlify.app/</a>.</p> <p>If you are not redirected automatically, please click the link above.</p> </body> </html>
