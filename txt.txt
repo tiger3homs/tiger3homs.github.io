@@ -1,0 +1,17 @@
+[
+  {"id":"6b82bc9e692a488f7f9b7d854aad51","name":"w1z","kills":14,"deaths":7,"flag":"🇳🇱","team":"TR"},
+  {"id":"d1c7c577f831091de4cf0788d01612","name":"Болярин","kills":11,"deaths":8,"flag":"🇳🇱","team":"TR"},
+  {"id":"97725734005aecd8ed23bf291e4022","name":"BOMBACI MULAYiM","kills":9,"deaths":8,"flag":"🏳️","team":"TR"},
+  {"id":"39544fca62c3a031f365eda0087bde","name":"Optimus Prime","kills":10,"deaths":6,"flag":"🏳️","team":"TR"},
+  {"id":"5624eedfa0c2b9574defeee2766528","name":"WHY SO EZ","kills":9,"deaths":10,"flag":"🏳️","team":"TR"},
+
+  {"id":"732b49470e097bfc8fc68026ddd154","name":"ljuenna naptin amk","kills":17,"deaths":10,"flag":"🇹🇷","team":"CT"},  
+  {"id":"1225ec556f100e5f0afd28b8d286ad","name":"PAK","kills":5,"deaths":11,"flag":"🇧🇾","team":"CT"},
+  {"id":"8ed5703a033e355423b887bfd34e96","name":"Fake Russian","kills":4,"deaths":12,"flag":"🇷🇺","team":"CT"},
+  {"id":"4a9cfad894d9bf904f3b4f71e8f857","name":"vic","kills":8,"deaths":11,"flag":"🇨🇭","team":"CT"},
+  {"id":"b688fd1df779470a9cb5a3d0f92421","name":"KaiSeR彡SoZe","kills":4,"deaths":10,"flag":"🇩🇪","team":"CT"}
+]
+
+
+{"id":"421170d06c533d31715a421f4acfc0","name":"ryan gooseling","kills":2,"deaths":1,"flag":"🇧🇾","team":"CT"},
+[{"id":"6b82bc9e692a488f7f9b7d854aad51","name":"w1z","kills":15,"deaths":11,"flag":"🇳🇱","team":"CT"},{"id":"421170d06c533d31715a421f4acfc0","name":"ryan gooseling","kills":2,"deaths":1,"flag":"🇧🇾","team":"CT"},{"id":"8ed5703a033e355423b887bfd34e96","name":"Fake Russian","kills":0,"deaths":1,"flag":"🇷🇺","team":"CT"},{"id":"732b49470e097bfc8fc68026ddd154","name":"ljuenna naptin amk","kills":1,"deaths":1,"flag":"🇹🇷","team":"TR"},{"id":"97725734005aecd8ed23bf291e4022","name":"BOMBACI MULAYiM","kills":1,"deaths":1,"flag":"🏳️","team":"TR"},{"id":"39544fca62c3a031f365eda0087bde","name":"Optimus Prime","kills":0,"deaths":1,"flag":"🏳️","team":"TR"},{"id":"21e4ff28e3b243b44a44ebb40e78f4","name":"meooow","kills":0,"deaths":1,"flag":"🇨🇭","team":"TR"},{"id":"b688fd1df779470a9cb5a3d0f92421","name":"KaiSeR彡SoZe","kills":0,"deaths":1,"flag":"🇩🇪","team":"TR"}]
