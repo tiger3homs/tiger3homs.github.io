@@ -1,120 +1,182 @@
 // ==UserScript==
-// @name         Enhanced Sorter & Channel Manager
+// @name         Enhanced Sorter & Channel Manager PRO
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Easy filtering and management for the Sorter tool
+// @version      2.0
+// @description  Advanced filtering, selection & bulk management for Sorter
 // @author       Gemini
 // @match        *://argontv.nl/*
 // @grant        none
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
-    // 1. CSS for the new UI elements
+    /* -------------------- CSS -------------------- */
     const style = document.createElement('style');
-    style.innerHTML = `
+    style.textContent = `
         #custom-manager-bar {
             position: sticky;
             top: 0;
             background: #393E46;
-            padding: 15px;
+            padding: 12px;
             z-index: 9999;
             border-bottom: 3px solid #00ADB5;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         #quick-filter {
-            flex-grow: 1;
+            flex: 1;
+            min-width: 220px;
             padding: 8px;
             border-radius: 5px;
             border: none;
             background: #222831;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
         }
         .mgmt-btn {
-            padding: 8px 15px;
+            padding: 7px 12px;
             border-radius: 5px;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: opacity 0.2s;
+            white-space: nowrap;
         }
-        .mgmt-btn:hover { opacity: 0.8; }
-        .btn-green { background: #198754; color: white; }
-        .btn-red { background: #dc3545; color: white; }
-        .btn-blue { background: #0d6efd; color: white; }
+        .btn-green { background: #198754; color: #fff; }
+        .btn-red   { background: #dc3545; color: #fff; }
+        .btn-blue  { background: #0d6efd; color: #fff; }
+        .btn-gray  { background: #6c757d; color: #fff; }
+        .mgmt-btn:hover { opacity: .85; }
 
-        /* Fix the container to allow sticky header */
-        #results { height: auto !important; overflow-y: visible !important; padding-top: 10px; }
+        #filter-stats {
+            color: #eee;
+            font-size: 14px;
+            margin-left: auto;
+        }
+
+        .result.selected {
+            outline: 2px solid #00ADB5;
+            background: rgba(0,173,181,0.08);
+        }
+
         body { overflow-y: auto !important; }
     `;
     document.head.appendChild(style);
 
-    // 2. Create the Management Interface
+    /* -------------------- Helpers -------------------- */
+    const getResults = () => [...document.querySelectorAll('.result')];
+    const isVisible = el => el.style.display !== 'none';
+
+    function updateStats() {
+        const total = getResults().length;
+        const visible = getResults().filter(isVisible).length;
+        document.getElementById('filter-stats').textContent =
+            `Visible: ${visible} / ${total}`;
+    }
+
+    function clearSelection() {
+        getResults().forEach(el => el.classList.remove('selected'));
+    }
+
+    /* -------------------- UI -------------------- */
     function createInterface() {
+        if (document.getElementById('custom-manager-bar')) return;
+
         const resultsCont = document.querySelector('#results');
         if (!resultsCont) return;
 
-        const managerBar = document.createElement('div');
-        managerBar.id = 'custom-manager-bar';
+        const bar = document.createElement('div');
+        bar.id = 'custom-manager-bar';
+        bar.innerHTML = `
+            <input id="quick-filter" placeholder="Filter channels…" />
 
-        managerBar.innerHTML = `
-            <input type="text" id="quick-filter" placeholder="Search channels (e.g. Sports, UK, Movie)...">
-            <button id="bulk-enable" class="mgmt-btn btn-green">Enable Visible</button>
-            <button id="bulk-disable" class="mgmt-btn btn-red">Disable Visible</button>
-            <button id="save-all" class="mgmt-btn btn-blue">Save & Exit</button>
+            <button id="select-visible" class="mgmt-btn btn-gray">Select Visible</button>
+            <button id="invert-visible" class="mgmt-btn btn-gray">Invert Selection</button>
+
+            <button id="enable-selected" class="mgmt-btn btn-green">Enable Selected</button>
+            <button id="disable-selected" class="mgmt-btn btn-red">Disable Selected</button>
+
+            <button id="clear-filter" class="mgmt-btn btn-gray">Clear</button>
+            <button id="save-all" class="mgmt-btn btn-blue">Save</button>
+
+            <span id="filter-stats"></span>
         `;
 
-        resultsCont.parentNode.insertBefore(managerBar, resultsCont);
+        resultsCont.parentNode.insertBefore(bar, resultsCont);
+        updateStats();
 
-        // --- Event Listeners ---
+        /* -------------------- Events -------------------- */
 
-        // Filtering Logic
-        document.getElementById('quick-filter').addEventListener('input', (e) => {
+        // Filtering
+        document.getElementById('quick-filter').addEventListener('input', e => {
             const val = e.target.value.toLowerCase();
-            document.querySelectorAll('.result').forEach(el => {
-                const name = el.getAttribute('data-catname').toLowerCase();
+            getResults().forEach(el => {
+                const name = (el.dataset.catname || '').toLowerCase();
                 el.style.display = name.includes(val) ? 'block' : 'none';
             });
+            clearSelection();
+            updateStats();
         });
 
-        // Bulk Enable visible
-        document.getElementById('bulk-enable').addEventListener('click', () => {
-            document.querySelectorAll('.result').forEach(el => {
-                if (el.style.display !== 'none') {
-                    el.querySelector('.result-enabled').checked = true;
+        // Click to select result
+        resultsCont.addEventListener('click', e => {
+            const res = e.target.closest('.result');
+            if (!res) return;
+            res.classList.toggle('selected');
+        });
+
+        // Select visible
+        document.getElementById('select-visible').onclick = () => {
+            getResults().forEach(el => {
+                if (isVisible(el)) el.classList.add('selected');
+            });
+        };
+
+        // Invert visible selection
+        document.getElementById('invert-visible').onclick = () => {
+            getResults().forEach(el => {
+                if (isVisible(el)) el.classList.toggle('selected');
+            });
+        };
+
+        // Enable / Disable selected
+        function setSelected(state) {
+            getResults().forEach(el => {
+                if (el.classList.contains('selected')) {
+                    const cb = el.querySelector('.result-enabled');
+                    if (cb) cb.checked = state;
                 }
             });
-        });
+        }
 
-        // Bulk Disable visible
-        document.getElementById('bulk-disable').addEventListener('click', () => {
-            document.querySelectorAll('.result').forEach(el => {
-                if (el.style.display !== 'none') {
-                    el.querySelector('.result-enabled').checked = false;
-                }
-            });
-        });
+        document.getElementById('enable-selected').onclick = () => setSelected(true);
+        document.getElementById('disable-selected').onclick = () => setSelected(false);
 
-        // Big Save Button
-        document.getElementById('save-all').addEventListener('click', () => {
+        // Clear filter
+        document.getElementById('clear-filter').onclick = () => {
+            document.getElementById('quick-filter').value = '';
+            getResults().forEach(el => el.style.display = 'block');
+            clearSelection();
+            updateStats();
+        };
+
+        // Save
+        document.getElementById('save-all').onclick = () => {
             if (typeof sendPayload === 'function') {
                 sendPayload();
-                Swal.fire('Saved!', 'Channel configuration updated.', 'success');
+                Swal?.fire?.('Saved!', 'Changes applied.', 'success');
             }
-        });
+        };
     }
 
-    // Initialize when results are loaded
-    const observer = new MutationObserver((mutations, obs) => {
-        const results = document.querySelectorAll('.result');
-        if (results.length > 0) {
+    /* -------------------- Init -------------------- */
+    const observer = new MutationObserver(() => {
+        if (document.querySelectorAll('.result').length) {
             createInterface();
-            obs.disconnect();
+            observer.disconnect();
         }
     });
 
